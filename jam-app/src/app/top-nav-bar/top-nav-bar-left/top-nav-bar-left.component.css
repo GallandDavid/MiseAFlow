@@ -1,0 +1,68 @@
+
+  
+  .container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .logo {
+    display: flex;
+    width: auto;
+    height: 100%;
+  }
+  
+  .logo-img {
+    display: block;
+    width: auto;
+    height: 100%;
+  }
+  
+  .menu-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+  }
+
+  .menu-button {
+    margin: 0 10px; 
+    position: relative;
+  }
+  
+  .menu-button:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: -10px; 
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 60%; 
+    background-color: #fff; 
+  }
+
+  .menu-button a {
+    text-decoration: none;
+    color: #ffffffb6; /* Couleur par défaut des liens */
+    font-size: 16px; /* Taille de police */
+    font-weight: bold; /* Épaisseur de police */
+    transition: color 0.3s ease; /* Transition douce pour le changement de couleur */
+  }
+  
+  .menu-button a:hover {
+    color: #cccccc94; /* Couleur au survol */
+  }
+  
+  .menu-button a:active,
+  .menu-button a:focus {
+    color: #74747485; /* Couleur lors du clic ou de la navigation au clavier */
+  }
+  
+  /* Pour ajouter un effet de soulignement sur les liens actifs */
+  .menu-button a.active {
+    text-decoration: underline;
+  }
+  

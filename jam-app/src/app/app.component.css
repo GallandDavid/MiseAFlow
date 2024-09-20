@@ -1,0 +1,24 @@
+.app {
+    width: 100%;
+  }
+  
+  /* Pour les écrans plus grands que 1200px */
+  @media (min-width: 1201px) {
+    .app {
+      width: calc(100%); /* 75% du conteneur moins 20px de marge */
+    }
+  }
+  
+  /* Pour les écrans entre 768px et 1200px */
+  @media (min-width: 769px) and (max-width: 1200px) {
+    .app {
+      width: calc(50% - 20px); /* 50% du conteneur moins 20px de marge */
+    }
+  }
+  
+  /* Pour les écrans mobiles (inférieurs à 768px) */
+  @media (max-width: 767px) {
+    .app {
+      width: 100%;
+    }
+  }
