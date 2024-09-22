@@ -1,0 +1,73 @@
+
+.batton-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.gif-overlay-batton {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 2;
+/*#### flamme  visible par default ####*/
+    /* Par défaut, l'overlay est visible */
+    opacity: 1; 
+/*#### End ####*/
+/*#### flamme non visible par default ####*/
+    /* Par défaut, l'overlay est invisible */
+    /*opacity: 0; */
+/*#### End ####*/
+    transition: opacity 0.2s ease-in-out; /* Transition fluide pour l'apparition/disparition */
+}
+
+.batton:hover .gif-overlay-batton {
+    /*#### flamme visible par default ####*/
+        /*opacity: 1; /* L'overlay devient visible au survol */
+    /*#### End ####*/
+    /*#### flamme non visible par default ####*/
+        opacity: 0; /* L'overlay devient invisible au survol */
+    /*#### End ####*/
+}
+
+
+.batton-top-gif, .batton-bottom-gif {
+    position: absolute;
+    width: 25%; /* Pour couvrir la moitié de la hauteur */
+    height: 25%;
+    object-fit: contain;
+}
+
+.batton-top-gif {
+    margin-top: 1px;
+    top: 0;
+    left: 37.5%; /* Centré horizontalement */
+}
+
+.batton-bottom-gif {
+    margin-bottom: 1px;
+    bottom: 0;
+    left: 37.5%; /* Centré horizontalement */
+}
+
+.batton-gif {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.batton-top-gif, .batton-bottom-gif {
+    position: absolute;
+    width: 25%; /* Pour couvrir la moitié de la hauteur */
+    height: 25%;
+    object-fit: contain;
+}

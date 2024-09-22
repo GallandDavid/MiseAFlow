@@ -12,13 +12,15 @@
   .logo {
     display: flex;
     width: auto;
-    height: 100%;
+    overflow: hidden;
+    height: 95%;
+    margin: 0.25vh; 
   }
   
   .logo-img {
     display: block;
     width: auto;
-    height: 100%;
+    height: auto;
   }
   
   .menu-container {

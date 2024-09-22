@@ -1,0 +1,29 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.container-staff {
+    display: flex;
+    width: auto;
+    height: 85%; /* Fixe explicitement la hauteur */
+    aspect-ratio: 1 / 1;
+    position: relative;
+}
+
+.container-orbe{
+    display: flex;
+    width: auto;
+    flex-direction: column;
+    align-items: center;
+    height: 100%; /* Fixe explicitement la hauteur */ 
+    aspect-ratio: 1 / 1;
+    position: relative;
+    justify-content: space-between;
+}
+
+
