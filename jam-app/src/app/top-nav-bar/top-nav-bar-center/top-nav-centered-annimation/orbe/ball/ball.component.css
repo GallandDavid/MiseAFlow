@@ -40,18 +40,4 @@
     height: 50%;
 }
 
-@keyframes move-image {
-    0% {
-      transform: translateX(0) translateY(0);
-    }
-    100% {
-      transform: translateX(-50%) translateY(-50%);
-    }
-  }
-  
-  .move-image {
-    animation: move-image 2s linear infinite;
-  }
-
-
   
