@@ -49,3 +49,7 @@
   .gif-overlay-ball {
     will-change: transform;
   }
+
+  .container-orbe, .gif-overlay-ball, .ball, app-ball {
+    overflow: visible; /* Permet au contenu de déborder */
+  }

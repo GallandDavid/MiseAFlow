@@ -1,3 +1,5 @@
+// orbe.service.ts
+
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -6,7 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class OrbeService {
   private secondOrbeElementSubject = new BehaviorSubject<HTMLElement | null>(null);
-  
+
   secondOrbeElement$ = this.secondOrbeElementSubject.asObservable();
 
   setSecondOrbeElement(element: HTMLElement) {

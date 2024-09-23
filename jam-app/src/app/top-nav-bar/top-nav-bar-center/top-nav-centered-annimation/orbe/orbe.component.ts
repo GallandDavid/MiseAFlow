@@ -1,3 +1,5 @@
+// orbe.component.ts
+
 import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
 import { BallComponent } from "./ball/ball.component";
 import { BowlComponent } from "./bowl/bowl.component";
@@ -12,62 +14,90 @@ import { gsap } from 'gsap';
   styleUrls: ['./orbe.component.css']
 })
 export class OrbeComponent implements OnInit, AfterViewInit {
-  private ballElement!: HTMLElement;
+  private firstOrbeElement!: HTMLElement;
   private secondOrbeElement!: HTMLElement | null;
 
   constructor(private elementRef: ElementRef, public orbeService: OrbeService) {}
 
   ngOnInit() {
-    this.ballElement = this.elementRef.nativeElement.querySelector('.gif-overlay-ball');
-    console.log('Ball element:', this.ballElement);
+    console.log('OnInit called');
+  }
+
+  ngAfterViewInit() {
+    console.log('ngAfterViewInit called');
     
+    this.firstOrbeElement = this.elementRef.nativeElement.querySelector('.first-orbe .ball');
+    console.log('First ball element:', this.firstOrbeElement);
+
     const secondOrbeElement = this.orbeService.getSecondOrbeElement();
     if (!secondOrbeElement) {
       const parentContainer = this.elementRef.nativeElement.closest('.container');
       if (parentContainer) {
         const secondOrbeElement = parentContainer.querySelectorAll('.container-orbe')[1];
         if (secondOrbeElement) {
-          this.secondOrbeElement = secondOrbeElement;
-          console.log('Second orbe element found');
-          this.orbeService.setSecondOrbeElement(secondOrbeElement);
+          this.secondOrbeElement = secondOrbeElement.querySelector('.ball');
+          console.log('Second ball element found');
+          this.orbeService.setSecondOrbeElement(this.secondOrbeElement!);
         } else {
-          console.error('Second orbe element not found');
+          console.error('Second ball element not found');
         }
       }
     } else {
-      this.secondOrbeElement = secondOrbeElement;
-      console.log('Second orbe element received');
+      this.secondOrbeElement = secondOrbeElement.querySelector('.ball');
+      console.log('Second ball element received');
     }
-  }
 
-  ngAfterViewInit() {
-      const secondOrbeElement = this.orbeService.getSecondOrbeElement();
-      if (!this.secondOrbeElement && secondOrbeElement) {
-        this.secondOrbeElement = secondOrbeElement;
-        console.log('Second orbe element received');
-        this.animateBallPosition();
-      } else if (!this.secondOrbeElement) {
-        console.error('Second orbe element still not found');
-      }
+    setTimeout(() => {
       this.animateBallPosition();
+    }, 100); // Ajout d'un délai pour s'assurer que tous les éléments sont chargés
   }
 
   animateBallPosition() {
-    if (this.secondOrbeElement && this.ballElement) {
-      gsap.to(this.ballElement, {
+    console.log('animateBallPosition called');
+    console.log('First element:', this.firstOrbeElement);
+    console.log('Second element:', this.secondOrbeElement);
+
+    if (this.secondOrbeElement && this.firstOrbeElement) {
+      // Calculer les positions absolues des éléments
+      const containerRect = this.elementRef.nativeElement.closest('.container').getBoundingClientRect();
+      const firstBallRect = this.firstOrbeElement.getBoundingClientRect();
+      const secondBallRect = this.secondOrbeElement.getBoundingClientRect();
+
+      // Déplacer le premier élément vers la position du deuxième élément
+      gsap.to(this.firstOrbeElement, {
         duration: 0.5,
-        x: this.secondOrbeElement.offsetLeft,
-        y: this.secondOrbeElement.offsetTop,
+        x: secondBallRect.left - containerRect.left + 'px',
+        y: secondBallRect.top - containerRect.top + 'px',
         onComplete: () => {
-          gsap.to(this.ballElement, {
-            duration: 0.5,
-            x: '-50%',
-            y: '-50%'
-          });
+          this.adjustFinalPosition(this.firstOrbeElement);
+        }
+      });
+
+      // Déplacer le deuxième élément vers la position du premier élément
+      gsap.to(this.secondOrbeElement, {
+        duration: 0.5,
+        x: firstBallRect.left - containerRect.left + 'px',
+        y: firstBallRect.top - containerRect.top + 'px',
+        onComplete: () => {
+          this.adjustFinalPosition(this.secondOrbeElement!);
         }
       });
     } else {
-      console.error('Ball element or second orbe element not found');
+      console.error('Ball elements not found');
     }
+  }
+
+  adjustFinalPosition(element: HTMLElement) {
+    const rect = element.getBoundingClientRect();
+    const containerRect = this.elementRef.nativeElement.closest('.container').getBoundingClientRect();
+    
+    const dx = rect.left - containerRect.left;
+    const dy = rect.top - containerRect.top;
+
+    gsap.to(element, {
+      duration: 0.5,
+      x: dx + '%',
+      y: dy + '%'
+    });
   }
 }
