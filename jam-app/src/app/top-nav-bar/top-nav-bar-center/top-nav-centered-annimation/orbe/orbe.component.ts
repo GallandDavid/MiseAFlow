@@ -65,7 +65,7 @@ export class OrbeComponent implements OnInit, AfterViewInit {
 
       // Déplacer le premier élément vers la position du deuxième élément
       gsap.to(this.firstOrbeElement, {
-        duration: 0.5,
+        duration: 1.0,
         x: secondBallRect.left - containerRect.left + 'px',
         y: secondBallRect.top - containerRect.top + 'px',
         onComplete: () => {
@@ -75,7 +75,7 @@ export class OrbeComponent implements OnInit, AfterViewInit {
 
       // Déplacer le deuxième élément vers la position du premier élément
       gsap.to(this.secondOrbeElement, {
-        duration: 0.5,
+        duration: 4.0,
         x: firstBallRect.left - containerRect.left + 'px',
         y: firstBallRect.top - containerRect.top + 'px',
         onComplete: () => {
@@ -95,7 +95,7 @@ export class OrbeComponent implements OnInit, AfterViewInit {
     const dy = rect.top - containerRect.top;
 
     gsap.to(element, {
-      duration: 0.5,
+      duration: 2.0,
       x: dx + '%',
       y: dy + '%'
     });
