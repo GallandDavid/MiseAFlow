@@ -6,16 +6,16 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class OrbeService {
-  private secondOrbeElementSubject = new BehaviorSubject<HTMLElement | null>(null);
+export class OrbeService {  
+  private ballElementsSubject = new BehaviorSubject<{ first: HTMLElement | null, second: HTMLElement | null }>({ first: null, second: null });
 
-  secondOrbeElement$ = this.secondOrbeElementSubject.asObservable();
-
-  setSecondOrbeElement(element: HTMLElement) {
-    this.secondOrbeElementSubject.next(element);
+  ballElements$ = this.ballElementsSubject.asObservable();
+  
+  setBallElements(elements: { first: HTMLElement | null, second: HTMLElement | null }) {
+    this.ballElementsSubject.next(elements);
   }
 
-  getSecondOrbeElement(): HTMLElement | null {
-    return this.secondOrbeElementSubject.value;
+  getBallElements(): { first: HTMLElement | null, second: HTMLElement | null } {
+    return this.ballElementsSubject.value;
   }
 }
