@@ -1,13 +1,16 @@
-
-import { Component} from '@angular/core';
-import { StaffComponent } from "./staff/staff.component";
+import { Component } from '@angular/core';
 import { OrbeComponent } from "./orbe/orbe.component";
+import { OrbeService } from "./orbe.service";
+import { StaffComponent } from './staff/staff.component';
 
 @Component({
   selector: 'app-top-nav-centered-annimation',
+  standalone: true,
+  imports: [OrbeComponent, StaffComponent],
   templateUrl: './top-nav-centered-annimation.component.html',
   styleUrls: ['./top-nav-centered-annimation.component.css'],
-  standalone: true,
-  imports: [StaffComponent, OrbeComponent]
+  providers: [OrbeService]
 })
-export class TopNavCenteredAnnimationComponent {}
+export class TopNavCenteredAnnimationComponent {
+  constructor(public orbeService: OrbeService) {}
+}
