@@ -27,13 +27,15 @@ export class OrbeComponent implements OnInit, AfterViewInit {
     console.log('ngAfterViewInit called');
     
     this.firstOrbeElement = this.elementRef.nativeElement.querySelector('.first-orbe .ball');
+    this.secondOrbeElement = this.elementRef.nativeElement.querySelector('.second-orbe .ball');
     console.log('First ball element:', this.firstOrbeElement);
 
     const secondOrbeElement = this.orbeService.getSecondOrbeElement();
     if (!secondOrbeElement) {
+      console.log('Second ball element not found in ngAfterViewInit');
       const parentContainer = this.elementRef.nativeElement.closest('.container');
       if (parentContainer) {
-        const secondOrbeElement = parentContainer.querySelectorAll('.container-orbe')[1];
+        const secondOrbeElement = parentContainer.querySelectorAll('.container-orbe')[2];
         if (secondOrbeElement) {
           this.secondOrbeElement = secondOrbeElement.querySelector('.ball');
           console.log('Second ball element found');
