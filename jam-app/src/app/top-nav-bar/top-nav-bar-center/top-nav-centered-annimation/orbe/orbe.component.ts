@@ -14,6 +14,7 @@ import { gsap } from 'gsap';
 export class OrbeComponent implements OnInit, AfterViewInit {
   private firstOrbeElement!: HTMLElement;
   private secondOrbeElement!: HTMLElement | null;
+  private timeline: gsap.core.Timeline | null = null;
 
   constructor(private elementRef: ElementRef, public orbeService: OrbeService) {}
 
@@ -41,8 +42,8 @@ export class OrbeComponent implements OnInit, AfterViewInit {
       this.firstOrbeElement = this.orbeService.getBallElements().second as HTMLElement;
     }
 
-    this.firstOrbeElement = this.firstOrbeElement.querySelector('.ball') as HTMLElement;
-    this.secondOrbeElement = this.secondOrbeElement.querySelector('.ball') as HTMLElement;
+    this.firstOrbeElement = this.firstOrbeElement.querySelector('.ball')as HTMLElement;
+    this.secondOrbeElement = this.secondOrbeElement.querySelector('.ball');
 
     console.log('First ball element:', this.firstOrbeElement);
     console.log('Second ball element:', this.secondOrbeElement);
@@ -65,7 +66,14 @@ export class OrbeComponent implements OnInit, AfterViewInit {
     const finalSecondX = firstBallPos.x - containerPos.x;
     const finalSecondY = firstBallPos.y - containerPos.y;
 
-    gsap.timeline()
+    if (this.timeline) {
+      this.timeline.kill(); // Arrête toute animation précédente
+    }
+
+    this.timeline = gsap.timeline({ repeat: -1 }); // Crée une nouvelle timeline qui se répète indéfiniment
+
+    this.timeline
+      .addLabel("start")
       .to(this.firstOrbeElement, {
         duration: 1.0,
         ease: 'power2.inOut',
@@ -77,9 +85,18 @@ export class OrbeComponent implements OnInit, AfterViewInit {
         ease: 'power2.inOut',
         x: finalSecondX,
         y: finalSecondY
-      }, 0);
+      }, 0)
+      .addLabel("end");
 
     console.log(`Début : Premier élément (${firstBallPos.x}px, ${firstBallPos.y}px), Second élément (${secondBallPos.x}px, ${secondBallPos.y}px)`);
+
+    this.timeline.eventCallback("onRepeat", () => {
+      console.log(`Animation répétée`);
+    });
+
+    this.timeline.eventCallback("onComplete", () => {
+      console.log(`Animation terminée`);
+    });
 
     gsap.delayedCall(1, () => {
       const newFirstBallPos = getElementPosition(this.firstOrbeElement);
@@ -87,6 +104,12 @@ export class OrbeComponent implements OnInit, AfterViewInit {
 
       console.log(`Fin : Premier élément (${newFirstBallPos.x}px, ${newFirstBallPos.y}px), Second élément (${newSecondBallPos.x}px, ${newSecondBallPos.y}px)`);
     });
+  }
+
+  ngOnDestroy() {
+    if (this.timeline) {
+      this.timeline.kill(); // Assurez-vous d'arrêter l'animation lors de la destruction du composant
+    }
   }
 }
 
