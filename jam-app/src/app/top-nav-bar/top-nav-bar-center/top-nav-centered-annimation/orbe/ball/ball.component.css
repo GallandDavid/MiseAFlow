@@ -1,47 +1,26 @@
 .container {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    flex-direction: row;
+    justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;
 }
 
-.ball{
-    display: flex;
-    height: 40%;
-    width: auto;
-    justify-content: center;
-    align-items: start;
-}
-
-.bowl{
-    display: flex;
-    height: 40%;
-    width: auto;
-    justify-content: center;
-    align-items:end;
-}
-
-.gif-overlay-ball-left, .gif-overlay-ball-right, .gif-overlay-bowl-left, .gif-overlay-bowl-right{
+.gif-overlay-ball{
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 50%;
+    height: 100%;
     overflow: hidden;
     z-index: 2;  
     aspect-ratio: 1/1;
-}
-.gif-overlay-ball-left {
     order: 1;
 }
-.gif-overlay-bowl-left {
-    order: 2;
-}
 
 
 
-.ball-left-gif, .ball-right-gif, .bowl-left-gif, .bowl-right-gif {
+.ball-gif{
     width: auto;
     height: auto;
     justify-content: center;
@@ -53,20 +32,10 @@
 
 
 
-.ball-gif, .bowl-gif {
+.gif{
     display: flex;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-.bowl-gif {
-    width: 100%;
-    height: 100%;
-}
-
-.ball-gif{
     width: 50%;
     height: 50%;
 }

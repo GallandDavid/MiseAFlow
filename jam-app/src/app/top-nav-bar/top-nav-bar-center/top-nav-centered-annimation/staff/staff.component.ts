@@ -24,7 +24,7 @@ export class StaffComponent  implements AfterViewInit, OnInit {
   }
 
   private initBatonAnimation(){
-      const batton = this.elementRef.nativeElement.querySelector('.batton');
+      const batton = this.elementRef.nativeElement.querySelector('.container');
       if (!batton) return;
       const battonImg = this.elementRef.nativeElement.querySelector('.batton-img');
       const topGIF = this.elementRef.nativeElement.querySelector('.batton-top-gif img');
