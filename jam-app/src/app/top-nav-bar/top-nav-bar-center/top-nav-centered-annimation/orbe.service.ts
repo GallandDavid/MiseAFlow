@@ -7,15 +7,15 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class OrbeService {  
-  private ballElementsSubject = new BehaviorSubject<{ first: HTMLElement | null, second: HTMLElement | null }>({ first: null, second: null });
+  private ballPositionsSubject = new BehaviorSubject<{ first: { x: number, y: number } | null, second: { x: number, y: number } | null}>({ first: null , second: null });
 
-  ballElements$ = this.ballElementsSubject.asObservable();
+  ballPositions$ = this.ballPositionsSubject.asObservable();
   
-  setBallElements(elements: { first: HTMLElement | null, second: HTMLElement | null }) {
-    this.ballElementsSubject.next(elements);
+  setBallPositions(positions: { first: { x: number, y: number } | null, second: { x: number, y: number } | null}) {
+    this.ballPositionsSubject.next(positions);
   }
 
-  getBallElements(): { first: HTMLElement | null, second: HTMLElement | null } {
-    return this.ballElementsSubject.value;
+  getBallPositions(): { first: { x: number, y: number } | null, second: { x: number, y: number } | null} {
+    return this.ballPositionsSubject.value;
   }
 }
