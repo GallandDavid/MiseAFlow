@@ -1,0 +1,42 @@
+Configurer les animations : Dans votre composant Angular, importez les fonctions nécessaires et définissez l’animation.
+TypeScript
+
+import { Component } from '@angular/core';
+import { trigger, state, style, transition, animate } from '@angular/animations';
+
+@Component({
+  selector: 'app-exponential-animation',
+  templateUrl: './exponential-animation.component.html',
+  styleUrls: ['./exponential-animation.component.css'],
+  animations: [
+    trigger('exponentialCurve', [
+      state('start', style({
+        transform: 'scale(1)'
+      })),
+      state('end', style({
+        transform: 'scale(2)'
+      })),
+      transition('start => end', [
+        animate('2s cubic-bezier(0.68, -0.55, 0.27, 1.55)')
+      ])
+    ])
+  ]
+})
+export class ExponentialAnimationComponent {
+  animationState = 'start';
+
+  toggleAnimation() {
+    this.animationState = this.animationState === 'start' ? 'end' : 'start';
+  }
+}
+Code généré par l'IA. Examinez et utilisez soigneusement. Plus d'informations sur la FAQ.
+Utiliser l’animation dans le template : Dans le fichier HTML de votre composant, appliquez l’animation à un élément.
+HTML
+
+<div [@exponentialCurve]="animationState" (click)="toggleAnimation()">
+  Cliquez pour animer
+</div>
+Code généré par l'IA. Examinez et utilisez soigneusement. Plus d'informations sur la FAQ.
+Ce code crée une animation qui utilise une courbe de Bézier pour simuler une courbe exponentielle. Lorsque vous cliquez sur l’élément, il passe de l’état start à l’état end, en augmentant sa taille de manière exponentielle.
+
+Si vous avez besoin de plus de détails ou d’exemples spécifiques, n’hésitez pas à demander ! 😊
