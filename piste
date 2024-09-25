@@ -40,3 +40,51 @@ Code généré par l'IA. Examinez et utilisez soigneusement. Plus d'informations
 Ce code crée une animation qui utilise une courbe de Bézier pour simuler une courbe exponentielle. Lorsque vous cliquez sur l’élément, il passe de l’état start à l’état end, en augmentant sa taille de manière exponentielle.
 
 Si vous avez besoin de plus de détails ou d’exemples spécifiques, n’hésitez pas à demander ! 😊
+
+
+
+
+
+
+
+
+Installer les modules nécessaires :
+npm install @angular/animations
+
+Importer les modules dans votre application :
+TypeScript
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
+Code généré par l'IA. Examinez et utilisez soigneusement. Plus d'informations sur la FAQ.
+Définir l’animation dans votre composant :
+TypeScript
+
+@Component({
+  selector: 'app-exponential-animation',
+  templateUrl: './exponential-animation.component.html',
+  styleUrls: ['./exponential-animation.component.css'],
+  animations: [
+    trigger('moveExponential', [
+      transition('void => *', [
+        animate('2s', keyframes([
+          style({ transform: 'translate(0, 0)', offset: 0 }),
+          style({ transform: 'translate(50%, 50%)', offset: 0.5 }),
+          style({ transform: 'translate(100%, 100%)', offset: 1.0 })
+        ]))
+      ])
+    ])
+  ]
+})
+export class ExponentialAnimationComponent {}
+Code généré par l'IA. Examinez et utilisez soigneusement. Plus d'informations sur la FAQ.
+Utiliser l’animation dans le template HTML :
+HTML
+
+<div [@moveExponential]="'in'">
+  <!-- Contenu à animer -->
+</div>
+Code généré par l'IA. Examinez et utilisez soigneusement. Plus d'informations sur la FAQ.
+Ce code crée une animation où un élément se déplace suivant une courbe exponentielle entre deux positions. Vous pouvez ajuster les valeurs de translate et les offset pour obtenir la courbe exacte que vous souhaitez12.
+
+Si vous avez besoin de plus de détails ou d’aide supplémentaire, n’hésitez pas à demander ! 😊
