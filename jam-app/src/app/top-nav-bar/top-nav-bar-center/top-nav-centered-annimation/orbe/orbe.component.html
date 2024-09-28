@@ -1,12 +1,8 @@
 <div class="container">
-    <div class="ball">
-        <app-ball
-            style="display: flex; width: 100%; height: 100%;">
-        </app-ball>
+    <div class="ball" [@moveBall]="{ value: ballState, params: { x: x, y: y } }">
+        <app-ball style="display: flex; width: 100%; height: 100%;"></app-ball>
     </div>
     <div class="bowl">
-        <app-bowl
-            style="display: flex; width: 100%; height: 100%;">
-        </app-bowl>
+        <app-bowl style="display: flex; width: 100%; height: 100%;"></app-bowl>
     </div>
 </div>
