@@ -1,4 +1,6 @@
 import { AfterViewInit, Component, ElementRef, NgZone, OnInit } from '@angular/core';
+import { AnimationService } from '../animation.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-staff',
@@ -7,76 +9,69 @@ import { AfterViewInit, Component, ElementRef, NgZone, OnInit } from '@angular/c
   templateUrl: './staff.component.html',
   styleUrl: './staff.component.css'
 })
-export class StaffComponent  implements AfterViewInit, OnInit {
+export class StaffComponent implements AfterViewInit, OnInit {
+  private animationSubscription!: Subscription;
 
-  constructor(private elementRef: ElementRef, private ngZone: NgZone) {}
+  constructor(private elementRef: ElementRef, private ngZone: NgZone, private animationService: AnimationService) {}
 
   ngOnInit() {
+    this.animationSubscription = this.animationService.startAnimation$.subscribe(() => {
+      this.startRotation();
+    });
   }
 
   ngAfterViewInit() {
-      this.initAnimations()
+    // Any additional initialization
   }
 
-
-  private initAnimations() {
-    this.initBatonAnimation()
+  ngOnDestroy() {
+    if (this.animationSubscription) {
+      this.animationSubscription.unsubscribe();
+    }
   }
-
-  private initBatonAnimation(){
-      const batton = this.elementRef.nativeElement.querySelector('.container');
-      if (!batton) return;
-      const battonImg = this.elementRef.nativeElement.querySelector('.batton-img');
-      const topGIF = this.elementRef.nativeElement.querySelector('.batton-top-gif img');
-      const bottomGIF = this.elementRef.nativeElement.querySelector('.batton-bottom-gif img');
-
-      const baseSpeed = 2000; // Durée de rotation en ms (2 secondes)
-      let currentSpeed = baseSpeed;
-      let targetSpeed = baseSpeed;
-      let speedChangeRate = 50; // Augmenté pour une transition plus lente
-      let lastTime = performance.now(); // Temps initial
-      let angle = 0; // Angle actuel de rotation
-      let lastAngleBeforeLeave = 0;
-
-      function updateAnimationSpeed(timestamp: number) {
-        const elapsedTime = timestamp - lastTime;
-        lastTime = timestamp;
-
-        if (currentSpeed !== targetSpeed) {
-          const diff = targetSpeed - currentSpeed;
-          const step = Math.abs(diff) > speedChangeRate ? speedChangeRate : diff;
-          currentSpeed += step;
-          currentSpeed = Math.max(baseSpeed, Math.min(currentSpeed, Infinity)); // Limite la vitesse entre baseSpeed et Infinity
-        }
-        // Met à jour l'angle de rotation
-        angle += (elapsedTime / currentSpeed) * 360;
-        batton.style.transform = `rotate(${angle}deg)`;
-        requestAnimationFrame(updateAnimationSpeed);
+  private startRotation() {
+    const batton = this.elementRef.nativeElement.querySelector('.container');
+    if (!batton) return;
+  
+    let angle = 0;
+    const initialSpeed = 0; // Initial speed in degrees per second
+    const targetSpeed = 180; // Target speed in degrees per second
+    const duration = 4000; // Duration to reach the target speed in milliseconds
+    const startTime = performance.now();
+  
+    const rotate = (timestamp: number) => {
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const currentSpeed = initialSpeed + (targetSpeed - initialSpeed) * progress;
+      const deltaTime = (timestamp - startTime) / 1000; // Time in seconds
+      angle += currentSpeed * (1 / 180); // Assuming 60 FPS for smoother animation
+      batton.style.transform = `rotate(${angle}deg)`;
+      if (progress < 1) {
+        requestAnimationFrame(rotate);
+      } else {
+        this.continueRotation(angle, targetSpeed);
       }
+    };
+  
+    requestAnimationFrame(rotate);
+  }
 
-      batton.addEventListener('mouseenter', () => {
-        lastAngleBeforeLeave = angle; // Enregistre l'angle actuel
-        targetSpeed = Infinity; // Ralentit progressivement jusqu'à s'arrêter
-        // Réinitialisez les positions des GIFs
-        topGIF.style.top = '0%';
-        bottomGIF.style.bottom = '0%';
-      });
+  private continueRotation(startAngle: number, speed: number) {
+    const batton = this.elementRef.nativeElement.querySelector('.container');
+    if (!batton) return;
 
-      batton.addEventListener('mouseleave', () => {
-        targetSpeed = baseSpeed; // Définis la nouvelle cible pour la vitesse
-        currentSpeed = Math.min(currentSpeed, baseSpeed); // Assure que la vitesse actuelle est inférieure ou égale à la vitesse cible
-        // Réinitialisez les positions des GIFs
-        topGIF.style.top = '0%';
-        bottomGIF.style.bottom = '0%';
-      });
+    let angle = startAngle;
+    let lastTimestamp = performance.now();
 
-      // Ajoutez un écouteur d'événements pour détecter la rotation de l'image
-      battonImg.addEventListener('animationiteration', () => {
-        // Réinitialisez les positions des GIFs à chaque rotation complète
-        topGIF.style.top = '0%';
-        bottomGIF.style.bottom = '0%';
-      });
-      
-      updateAnimationSpeed(performance.now());
+    const rotate = (timestamp: number) => {
+      const elapsed = timestamp - lastTimestamp;
+      lastTimestamp = timestamp;
+      const deltaAngle = speed * (elapsed / 1000);
+      angle += deltaAngle;
+      batton.style.transform = `rotate(${angle}deg)`;
+      requestAnimationFrame(rotate);
+    };
+
+    requestAnimationFrame(rotate);
   }
 }

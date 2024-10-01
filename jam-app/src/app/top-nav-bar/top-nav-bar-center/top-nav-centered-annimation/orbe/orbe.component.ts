@@ -97,7 +97,9 @@ export class OrbeComponent implements OnInit, AfterViewInit {
       this.firstOrbePosition = this.orbeService.getBallPositions().second;
     }
 
-    this.animateBallPosition();
+    if(this.orbeService.getAnimated()) {
+      this.animateBallPosition();
+    }
   }
 
   async animateBallPosition() {

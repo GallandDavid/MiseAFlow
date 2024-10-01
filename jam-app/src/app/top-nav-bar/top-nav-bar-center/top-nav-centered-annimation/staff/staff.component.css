@@ -1,22 +1,53 @@
 .container {
     display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
+    position: relative;
     width: 100%;
     height: 100%;
+    overflow: visible; /* Ensure no overflow */
 }
 
-.batton-img {
+.batton {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    width: auto; /* Adjust as needed to fit within the container */
+    height: 100%; /* Maintain aspect ratio */
+    display: flex;
+    justify-content: center;
+    align-items: center;    
+    transform-origin: center; /* Ensure rotation is around the center */
+    aspect-ratio: 1/1;
+
+}
+
+.center-batton {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(90deg);
     z-index: 1;
 }
 
+.left-batton {
+    top: 50%;
+    left: calc(50% - 15%); /* Adjust to position the left batton correctly */
+    transform: translate(-50%, -50%) rotate(25deg);
+    z-index: 2;
+}
+
+.right-batton {
+    top: 50%;
+    left: calc(50% + 15%); /* Adjust to position the right batton correctly */
+    transform: translate(-50%, -50%) rotate(-25deg);
+    z-index: 2;
+}
+
+.batton-img {
+    width: 100%;
+    height: 100%;
+}
+
 .gif-overlay-batton {
+    display: none;
     position: absolute;
     top: 0;
     left: 0;
@@ -24,58 +55,31 @@
     height: 100%;
     overflow: hidden;
     z-index: 2;
-/*#### flamme  visible par default ####*/
-    /* Par défaut, l'overlay est visible */
-    opacity: 1; 
-/*#### End ####*/
-/*#### flamme non visible par default ####*/
-    /* Par défaut, l'overlay est invisible */
-    /*opacity: 0; */
-/*#### End ####*/
-    transition: opacity 0.2s ease-in-out; /* Transition fluide pour l'apparition/disparition */
+    aspect-ratio: 1/1;
+    transition: opacity 0.2s ease-in-out;
 }
-
-.batton:hover .gif-overlay-batton {
-    /*#### flamme visible par default ####*/
-        /*opacity: 1; /* L'overlay devient visible au survol */
-    /*#### End ####*/
-    /*#### flamme non visible par default ####*/
-        opacity: 0; /* L'overlay devient invisible au survol */
-    /*#### End ####*/
-}
-
 
 .batton-top-gif, .batton-bottom-gif {
+    display: flex;
     position: absolute;
-    width: 25%; /* Pour couvrir la moitié de la hauteur */
-    height: 25%;
+    width: 30%;
+    height: 30%;
     object-fit: contain;
+    aspect-ratio: 1/1;
+    left: 35%;
+    z-index: 0;
 }
-
 .batton-top-gif {
-    margin-top: 1px;
-    top: 0;
-    left: 37.5%; /* Centré horizontalement */
+    top: -1.5%;
 }
 
 .batton-bottom-gif {
-    margin-bottom: 1px;
-    bottom: 0;
-    left: 37.5%; /* Centré horizontalement */
+    bottom: -1.5%;
 }
 
 .batton-gif {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
     object-fit: contain;
-}
-
-.batton-top-gif, .batton-bottom-gif {
-    position: absolute;
-    width: 25%; /* Pour couvrir la moitié de la hauteur */
-    height: 25%;
-    object-fit: contain;
+    aspect-ratio: 1/1;
 }

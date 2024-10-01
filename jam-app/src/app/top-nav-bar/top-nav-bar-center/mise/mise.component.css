@@ -1,0 +1,13 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.text {
+    font-size: 40px;
+    font-weight: bold;  
+    color: #ffffff;
+    font-family: 'Noto Sans JP', sans-serif;
+}

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { OrbeComponent } from "./orbe/orbe.component";
 import { OrbeService } from "./orbe.service";
 import { StaffComponent } from './staff/staff.component';
+import { AnimationService } from './animation.service';
 
 @Component({
   selector: 'app-top-nav-centered-annimation',
@@ -12,5 +13,9 @@ import { StaffComponent } from './staff/staff.component';
   providers: [OrbeService]
 })
 export class TopNavCenteredAnnimationComponent {
-  constructor(public orbeService: OrbeService) {}
+  constructor(public orbeService: OrbeService, private animationService: AnimationService) {}
+
+  onMouseEnter() {
+    this.animationService.triggerStartAnimation();
+  }
 }
