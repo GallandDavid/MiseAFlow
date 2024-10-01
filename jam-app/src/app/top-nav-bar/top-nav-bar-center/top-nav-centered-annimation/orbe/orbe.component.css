@@ -38,7 +38,12 @@
   .gif-overlay-ball {
     animation: move-image 0.5s linear forwards;
   }
+  
+  .gif-overlay-ball {
+    will-change: transform;
+  }
 
+/*  BOXES
   .container-orbe {
     border: 2px solid red;
   }
@@ -46,9 +51,7 @@
   .ball, .bowl {
     border: 2px solid blue;
   }
-  .gif-overlay-ball {
-    will-change: transform;
-  }
+    */
 
 
 

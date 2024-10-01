@@ -3,6 +3,9 @@ import { BallComponent } from "./ball/ball.component";
 import { BowlComponent } from "./bowl/bowl.component";
 import { OrbeService } from "../orbe.service";
 import { gsap } from 'gsap';
+import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
+
+gsap.registerPlugin(MotionPathPlugin);
 
 @Component({
   selector: 'app-orbe',
@@ -23,7 +26,6 @@ export class OrbeComponent implements OnInit, AfterViewInit {
   constructor(private elementRef: ElementRef, public orbeService: OrbeService) {}
 
   ngOnInit() {
-    console.log('OnInit called');
     this.firstOrbeElement = this.elementRef.nativeElement.querySelector('.ball').closest('.first-orbe');
     if(this.firstOrbeElement != null) {
       this.firstOrbeElement = this.firstOrbeElement.querySelector('.ball')as HTMLElement;
@@ -63,11 +65,7 @@ export class OrbeComponent implements OnInit, AfterViewInit {
       this.secondOrbePosition = this.orbeService.getBallPositions().first;
       this.firstOrbePosition = this.orbeService.getBallPositions().second;
     }
-    if (this.firstOrbePosition && this.secondOrbePosition) {
-      console.log("For the " + this.elementOrder() + " orbe :");
-      console.log('First ball position:', this.firstOrbePosition);
-      console.log('Second ball position:', this.secondOrbePosition);
-    } else {
+    if (!this.firstOrbePosition || !this.secondOrbePosition) {
         console.error('One or both ball positions are undefined');
     }
   }
@@ -91,9 +89,6 @@ export class OrbeComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    console.log('ngAfterViewInit called');
-    this.logBallPositions();
-
     if(this.element) {
       this.firstOrbePosition = this.orbeService.getBallPositions().first;
       this.secondOrbePosition = this.orbeService.getBallPositions().second;
@@ -101,10 +96,6 @@ export class OrbeComponent implements OnInit, AfterViewInit {
       this.secondOrbePosition = this.orbeService.getBallPositions().first;
       this.firstOrbePosition = this.orbeService.getBallPositions().second;
     }
-
-
-    console.log('First ball position:', this.firstOrbePosition);
-    console.log('Second ball position:', this.secondOrbePosition);
 
     this.animateBallPosition();
   }
@@ -117,13 +108,8 @@ export class OrbeComponent implements OnInit, AfterViewInit {
     }
   
     const containerPos = await getAccuratePosition(this.elementRef.nativeElement.closest('.container'));
-    console.log("containerPos : ", containerPos);
     const containerOrbePos = await getAccuratePosition(this.elementRef.nativeElement.closest('.container-orbe'));
-    console.log("containerOrbePos : ", containerOrbePos);
     const containerBallPos = await getAccuratePosition(this.elementRef.nativeElement.querySelector('.ball'));
-    console.log("containerBallPos : ", containerBallPos);
-    const firstBallPos = this.firstOrbePosition;
-    const secondBallPos = this.secondOrbePosition;
 
     const finalFirstX = this.secondOrbePosition.x - containerPos.x - ((containerOrbePos.width / 2) - containerBallPos.width / 2);
     const finalFirstY = this.secondOrbePosition.y - containerPos.y;
@@ -138,17 +124,30 @@ export class OrbeComponent implements OnInit, AfterViewInit {
       this.secondTimeline.kill();
     }
 
-    this.firstTimeline = gsap.timeline({ repeat: -1 });
-    this.secondTimeline = gsap.timeline({ repeat: -1 });
+    this.firstTimeline = gsap.timeline({ repeat: -1, repeatDelay: 3 });
+    this.secondTimeline = gsap.timeline({ repeat: -1, repeatDelay: 3 });
 
+    const firstPath = [
+      { x: 0, y: 0 },
+      { x: finalFirstX / 2, y: finalFirstY / 2 - 30 },
+      { x: finalFirstX, y: finalFirstY }
+    ];
+
+    const secondPath = [
+      { x: 0, y: 0 },
+      { x: finalSecondX / 2, y: finalSecondY / 2 - 30 },
+      { x: finalSecondX, y: finalSecondY }
+    ]; 
     if (this.element) {
       this.firstTimeline
         .addLabel("start")
         .to(this.firstOrbeElement, {
           duration: 1.0,
           ease: 'power2.inOut',
-          x: finalFirstX,
-          y: finalFirstY
+          motionPath: {
+            path: firstPath,
+            autoRotate: false
+          }
         })
         .addLabel("end");
     } else {
@@ -157,36 +156,13 @@ export class OrbeComponent implements OnInit, AfterViewInit {
         .to(this.secondOrbeElement, {
           duration: 1.0,
           ease: 'power2.inOut',
-          x: finalSecondX,
-          y: finalSecondY
+          motionPath: {
+            path: secondPath,
+            autoRotate: false
+          }
         })
         .addLabel("end");
     }
-  
-    console.log(`(For the ${this.elementOrder()} orbe)	Début : Premier élément (${firstBallPos.x}px, ${firstBallPos.y}px), Second élément (${secondBallPos.x}px, ${secondBallPos.y}px)`);
-  
-    this.firstTimeline.eventCallback("onRepeat", () => {
-      console.log(`Animation répétée pour le premier élément`);
-    });
-
-    this.secondTimeline.eventCallback("onRepeat", () => {
-      console.log(`Animation répétée pour le second élément`);
-    });
-
-    this.firstTimeline.eventCallback("onComplete", () => {
-      console.log(`Animation terminée pour le premier élément`);
-    });
-
-    this.secondTimeline.eventCallback("onComplete", () => {
-      console.log(`Animation terminée pour le second élément`);
-    });
-  
-    gsap.delayedCall(1, () => {
-      const newFirstBallPos = getElementPosition(this.firstOrbeElement);
-      const newSecondBallPos = getElementPosition(this.secondOrbeElement!);
-  
-      console.log(`(For the ${this.elementOrder()} orbe) Fin : Premier élément (${newFirstBallPos.x}px, ${newFirstBallPos.y}px), Second élément (${newSecondBallPos.x}px, ${newSecondBallPos.y}px)`);
-    });
   }
 
   ngOnDestroy() {
