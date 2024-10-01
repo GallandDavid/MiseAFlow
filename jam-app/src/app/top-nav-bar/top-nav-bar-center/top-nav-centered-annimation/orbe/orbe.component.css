@@ -1,4 +1,4 @@
-.container {
+.container-orbe {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -22,55 +22,6 @@
     justify-content: center;
     align-items:end;
 }
-
-.gif-overlay-ball-left, .gif-overlay-ball-right, .gif-overlay-bowl-left, .gif-overlay-bowl-right{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50%;
-    overflow: hidden;
-    z-index: 2;  
-    aspect-ratio: 1/1;
-}
-.gif-overlay-ball-left {
-    order: 1;
-}
-.gif-overlay-bowl-left {
-    order: 2;
-}
-
-
-
-.ball-left-gif, .ball-right-gif, .bowl-left-gif, .bowl-right-gif {
-    width: auto;
-    height: auto;
-    justify-content: center;
-    display: flex;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-}
-
-
-
-.ball-gif, .bowl-gif {
-    display: flex;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-}
-
-.bowl-gif {
-    width: 100%;
-    height: 100%;
-}
-
-.ball-gif{
-    width: 50%;
-    height: 50%;
-}
-
 @keyframes move-image {
     0% {
       transform: translateX(0) translateY(0);
@@ -80,9 +31,28 @@
     }
   }
   
-  .move-image {
-    animation: move-image 2s linear infinite;
+  .animate-move {
+    animation: move-image 0.5s linear forwards;
   }
+  
+  .gif-overlay-ball {
+    animation: move-image 0.5s linear forwards;
+  }
+  
+  .gif-overlay-ball {
+    will-change: transform;
+  }
+
+/*  BOXES
+  .container-orbe {
+    border: 2px solid red;
+  }
+  
+  .ball, .bowl {
+    border: 2px solid blue;
+  }
+    */
+
 
 
   

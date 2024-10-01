@@ -1,0 +1,21 @@
+// orbe.service.ts
+
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class OrbeService {  
+  private ballPositionsSubject = new BehaviorSubject<{ first: { x: number, y: number } | null, second: { x: number, y: number } | null}>({ first: null , second: null });
+
+  ballPositions$ = this.ballPositionsSubject.asObservable();
+  
+  setBallPositions(positions: { first: { x: number, y: number } | null, second: { x: number, y: number } | null}) {
+    this.ballPositionsSubject.next(positions);
+  }
+
+  getBallPositions(): { first: { x: number, y: number } | null, second: { x: number, y: number } | null} {
+    return this.ballPositionsSubject.value;
+  }
+}

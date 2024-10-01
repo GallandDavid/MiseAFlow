@@ -17,7 +17,9 @@
     aspect-ratio: 1/1;
     order: 1;
 }
-
+.gif-overlay-ball {
+    will-change: transform;
+  }
 
 
 .ball-gif{
@@ -39,5 +41,7 @@
     width: 50%;
     height: 50%;
 }
+
+
 
   
