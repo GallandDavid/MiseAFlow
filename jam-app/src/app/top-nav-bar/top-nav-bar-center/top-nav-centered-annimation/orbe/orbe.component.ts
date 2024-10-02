@@ -1,7 +1,10 @@
-import { Component, OnInit, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, OnDestroy, ViewChild } from '@angular/core';
 import { BallComponent } from "./ball/ball.component";
 import { BowlComponent } from "./bowl/bowl.component";
+import { StaffComponent } from "../staff/staff.component";
 import { OrbeService } from "../orbe.service";
+import { AnimationService } from '../animation.service';
+import { Subscription } from 'rxjs';
 import { gsap } from 'gsap';
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
 
@@ -10,11 +13,15 @@ gsap.registerPlugin(MotionPathPlugin);
 @Component({
   selector: 'app-orbe',
   standalone: true,
-  imports: [BallComponent, BowlComponent],
+  imports: [BallComponent, BowlComponent, StaffComponent],
   templateUrl: './orbe.component.html',
   styleUrls: ['./orbe.component.css']
 })
-export class OrbeComponent implements OnInit, AfterViewInit {
+export class OrbeComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild(BowlComponent) bowlComponent!: BowlComponent;
+  @ViewChild(BallComponent) ballComponent!: BallComponent;
+  @ViewChild(StaffComponent) staffComponent!: StaffComponent;
+
   private element!: boolean;
   private firstOrbeElement!: HTMLElement;
   private secondOrbeElement!: HTMLElement | null;
@@ -22,8 +29,9 @@ export class OrbeComponent implements OnInit, AfterViewInit {
   private secondOrbePosition!: { x: number, y: number } | null;
   private firstTimeline: gsap.core.Timeline | null = null;
   private secondTimeline: gsap.core.Timeline | null = null;
+  private animationSubscription!: Subscription;
 
-  constructor(private elementRef: ElementRef, public orbeService: OrbeService) {}
+  constructor(private elementRef: ElementRef, public orbeService: OrbeService, private animationService: AnimationService) {}
 
   ngOnInit() {
     this.firstOrbeElement = this.elementRef.nativeElement.querySelector('.ball').closest('.first-orbe');
@@ -55,37 +63,11 @@ export class OrbeComponent implements OnInit, AfterViewInit {
         } 
       }
     }
-  }
 
-  logBallPositions() {
-    if(this.element) {
-      this.firstOrbePosition = this.orbeService.getBallPositions().first;
-      this.secondOrbePosition = this.orbeService.getBallPositions().second;
-    } else {
-      this.secondOrbePosition = this.orbeService.getBallPositions().first;
-      this.firstOrbePosition = this.orbeService.getBallPositions().second;
-    }
-    if (!this.firstOrbePosition || !this.secondOrbePosition) {
-        console.error('One or both ball positions are undefined');
-    }
-  }
-  
-  getElementPosition(elementId: string): { x: number, y: number } | null {
-    const element = document.getElementById(elementId);
-    if (!element) {
-        console.error(this.elementOrder() + ` element with ID ${elementId} not found`);
-        return null;
-    }
-    const rect = element.getBoundingClientRect();
-    return { x: rect.left, y: rect.top };
-  }
-
-  elementOrder(): string {
-    if(this.element) {
-      return "first";
-    } else {
-      return "second";
-    }
+    this.animationSubscription = this.animationService.triggerBowlImageChange$.subscribe(() => {
+      console.log('triggerBowlImageChange$ event received'); // Debug log
+      this.triggerBowlImageChange();
+    });
   }
 
   ngAfterViewInit() {
@@ -100,10 +82,14 @@ export class OrbeComponent implements OnInit, AfterViewInit {
     if(this.orbeService.getAnimated()) {
       this.animateBallPosition();
     }
+
+    // Écouter l'événement de fin de transition de BallComponent
+    this.ballComponent.transitionEnd.subscribe(() => {
+      this.animateBallPosition();
+    });
   }
 
   async animateBallPosition() {
-    
     if (!this.firstOrbePosition || !this.secondOrbePosition) {
       console.error('Ball position not found');
       return;
@@ -174,9 +160,35 @@ export class OrbeComponent implements OnInit, AfterViewInit {
     if (this.secondTimeline) {
       this.secondTimeline.kill();
     }
+    if (this.animationSubscription) {
+      this.animationSubscription.unsubscribe();
+    }
+  }
+
+  triggerBowlImageChange() {
+    console.log('triggerBowlImageChange called in OrbeComponent'); // Debug log
+    if (this.bowlComponent) {
+      console.log('Bowl component found, calling triggerImageChange'); // Debug log
+      this.bowlComponent.triggerImageChange();
+    } else {
+      console.log('Bowl component not found'); // Debug log
+    }
+
+    if (this.ballComponent) {
+      console.log('Ball component found, calling triggerImageChange'); // Debug log
+      this.ballComponent.triggerImageChange();
+    } else {
+      console.log('Ball component not found'); // Debug log
+    }
+
+    if (this.staffComponent) {
+      console.log('Staff component found, calling triggerImageChange'); // Debug log
+      this.staffComponent.triggerImageChange();
+    } else {
+      console.log('Staff component not found'); // Debug log
+    }
   }
 }
-
 function getElementPosition(element: HTMLElement): { x: number, y: number } {
   const rect = element.getBoundingClientRect();
   return {

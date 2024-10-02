@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, NgZone, OnInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, NgZone, OnInit, Output } from '@angular/core';
 import { AnimationService } from '../animation.service';
 import { Subscription } from 'rxjs';
 
@@ -11,6 +11,9 @@ import { Subscription } from 'rxjs';
 })
 export class StaffComponent implements AfterViewInit, OnInit {
   private animationSubscription!: Subscription;
+
+  @Output() transitionEnd = new EventEmitter<void>();
+  @Output() rotationEnd = new EventEmitter<void>(); // New EventEmitter
 
   constructor(private elementRef: ElementRef, private ngZone: NgZone, private animationService: AnimationService) {}
 
@@ -29,6 +32,7 @@ export class StaffComponent implements AfterViewInit, OnInit {
       this.animationSubscription.unsubscribe();
     }
   }
+
   private startRotation() {
     const batton = this.elementRef.nativeElement.querySelector('.container');
     if (!batton) return;
@@ -50,6 +54,7 @@ export class StaffComponent implements AfterViewInit, OnInit {
         requestAnimationFrame(rotate);
       } else {
         this.continueRotation(angle, targetSpeed);
+        this.rotationEnd.emit(); // Emit event when the first rotation ends
       }
     };
   
@@ -73,5 +78,40 @@ export class StaffComponent implements AfterViewInit, OnInit {
     };
 
     requestAnimationFrame(rotate);
+
+    // Appeler triggerImageChange après avoir commencé la rotation continue
+    this.triggerImageChange();
+  }
+
+  triggerImageChange() {
+    console.log('triggerImageChange called for StaffComponent'); // Debug log
+    this.resetGifs();
+  }
+
+  resetGifs() {
+    console.log('resetGifs called for StaffComponent'); // Debug log
+    const gifOverlays = this.elementRef.nativeElement.querySelectorAll('.gif-overlay-batton');
+    if (gifOverlays.length) {
+      console.log('GIF overlays found:', gifOverlays.length); // Debug log
+      // Masquer les images avant de les réinitialiser
+      gifOverlays.forEach((gif:any) => gif.style.display = 'none');
+
+      setTimeout(() => {
+        // Afficher les images après les avoir rechargées
+        gifOverlays.forEach((gif:any) => gif.style.display = 'block');
+
+        // Déclencher la transition d'opacité après un court délai
+        setTimeout(() => {
+          gifOverlays.forEach((gif:any) => gif.style.opacity = '1');
+
+          // Écouter la fin de la transition
+          gifOverlays[0].addEventListener('transitionend', () => {
+            this.transitionEnd.emit();
+          }, { once: true });
+        }, 50); // Small delay to ensure the GIFs are reloaded
+      }, 50); // Small delay to ensure the GIFs are reloaded
+    } else {
+      console.log('No GIF overlays found'); // Debug log
+    }
   }
 }

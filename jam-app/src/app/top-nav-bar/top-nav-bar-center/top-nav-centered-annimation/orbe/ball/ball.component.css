@@ -7,7 +7,7 @@
     height: 100%;
 }
 
-.gif-overlay-ball{
+.gif-overlay-ball {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -15,14 +15,12 @@
     overflow: hidden;
     z-index: 2;  
     aspect-ratio: 1/1;
-    order: 1;
+    order: 2;
+    position: relative; /* Ensure the ball is positioned relative to its container */
 }
-.gif-overlay-ball {
-    will-change: transform;
-  }
 
-
-.ball-gif{
+.ball-gif {
+    align-items: center;
     width: auto;
     height: auto;
     justify-content: center;
@@ -32,16 +30,31 @@
     object-fit: contain;
 }
 
-
-
-.gif{
-    display: flex;
+.gif-container {
+    position: absolute;
     top: 0;
     left: 0;
-    width: 50%;
-    height: 50%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gif {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.new-gif {
+    opacity: 0;
+    transition: opacity 2s;
+}
+
+.fade-out {
+    opacity: 0;
+    transition: opacity 2s;
 }
 
 
-
-  

@@ -7,7 +7,7 @@
     height: 100%;
 }
 
-.gif-overlay-bowl{
+.gif-overlay-bowl {
     display: flex;
     justify-content: center;
     align-items: end;
@@ -16,9 +16,10 @@
     z-index: 2;  
     aspect-ratio: 1/1;
     order: 2;
+    position: relative; /* Ensure the bowl is positioned relative to its container */
 }
 
-.bowl-gif{
+.bowl-gif {
     align-items: end;
     width: auto;
     height: auto;
@@ -29,12 +30,31 @@
     object-fit: contain;
 }
 
-.gif {
-    display: flex;
+.gif-container {
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gif {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.new-gif {
+    opacity: 0;
+    transition: opacity 2s;
+}
+
+.fade-out {
+    opacity: 0;
+    transition: opacity 2s;
 }
 
 @keyframes move-image {
@@ -50,5 +70,3 @@
     animation: move-image 2s linear infinite;
   }
 
-
-  
