@@ -85,9 +85,11 @@ export class OrbeComponent implements OnInit, AfterViewInit, OnDestroy {
 
     // Écouter l'événement de fin de transition de BallComponent
     this.ballComponent.transitionEnd.subscribe(() => {
-      this.animateBallPosition();
-    });
-  }
+        setTimeout(() => {
+          this.animateBallPosition();
+        }, 150); // Delay of 1 second (1000 milliseconds)
+      });
+    } 
 
   async animateBallPosition() {
     if (!this.firstOrbePosition || !this.secondOrbePosition) {
@@ -100,9 +102,9 @@ export class OrbeComponent implements OnInit, AfterViewInit, OnDestroy {
     const containerBallPos = await getAccuratePosition(this.elementRef.nativeElement.querySelector('.ball'));
 
     const finalFirstX = this.secondOrbePosition.x - containerPos.x - ((containerOrbePos.width / 2) - containerBallPos.width / 2);
-    const finalFirstY = this.secondOrbePosition.y - containerPos.y;
+    const finalFirstY = this.secondOrbePosition.y - containerPos.y + (containerBallPos.height / 4);
     const finalSecondX = this.firstOrbePosition.x - containerPos.x - ((containerOrbePos.width / 2) - containerBallPos.width / 2);
-    const finalSecondY = this.firstOrbePosition.y - containerPos.y;
+    const finalSecondY = (this.firstOrbePosition.y + (containerBallPos.height / 4))-  containerPos.y ;
 
     if (this.firstTimeline) {
       this.firstTimeline.kill();
@@ -112,26 +114,26 @@ export class OrbeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.secondTimeline.kill();
     }
 
-    this.firstTimeline = gsap.timeline({ repeat: -1, repeatDelay: 3 });
-    this.secondTimeline = gsap.timeline({ repeat: -1, repeatDelay: 3 });
+    this.firstTimeline = gsap.timeline({ repeat: -1, repeatDelay: 1 });
+    this.secondTimeline = gsap.timeline({ repeat: -1, repeatDelay: 1});
 
     const firstPath = [
       { x: 0, y: 0 },
-      { x: finalFirstX / 2, y: finalFirstY / 2 - 30 },
+      { x: finalFirstX / 2, y: finalFirstY / 2 - 37.5 },
       { x: finalFirstX, y: finalFirstY }
     ];
 
     const secondPath = [
       { x: 0, y: 0 },
-      { x: finalSecondX / 2, y: finalSecondY / 2 - 30 },
+      { x: finalSecondX / 2, y: finalSecondY / 2 - 37.5 },
       { x: finalSecondX, y: finalSecondY }
     ]; 
     if (this.element) {
       this.firstTimeline
         .addLabel("start")
         .to(this.firstOrbeElement, {
-          duration: 1.0,
-          ease: 'power2.inOut',
+          duration: 3,
+          ease: 'power2.in',
           motionPath: {
             path: firstPath,
             autoRotate: false
@@ -142,8 +144,8 @@ export class OrbeComponent implements OnInit, AfterViewInit, OnDestroy {
       this.secondTimeline
         .addLabel("start")
         .to(this.secondOrbeElement, {
-          duration: 1.0,
-          ease: 'power2.inOut',
+          duration: 3,
+          ease: 'power2.in',
           motionPath: {
             path: secondPath,
             autoRotate: false

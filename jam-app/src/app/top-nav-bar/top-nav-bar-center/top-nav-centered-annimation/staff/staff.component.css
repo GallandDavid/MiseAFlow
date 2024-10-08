@@ -20,6 +20,8 @@
 }
 
 .center-batton {
+    height: 65%;
+    aspect-ratio: 1/1;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%) rotate(90deg);
@@ -55,7 +57,7 @@
     overflow: hidden;
     z-index: 2;
     aspect-ratio: 1/1;
-    transition: opacity 1s ease-in-out;
+    transition: opacity 1.5s ease-in-out;
 }
 
 .batton-top-gif, .batton-bottom-gif {

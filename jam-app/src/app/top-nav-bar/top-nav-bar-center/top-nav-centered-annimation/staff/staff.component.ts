@@ -39,7 +39,7 @@ export class StaffComponent implements AfterViewInit, OnInit {
   
     let angle = 0;
     const initialSpeed = 0; // Initial speed in degrees per second
-    const targetSpeed = 180; // Target speed in degrees per second
+    const targetSpeed = 90; // Target speed in degrees per second
     const duration = 4000; // Duration to reach the target speed in milliseconds
     const startTime = performance.now();
   
@@ -85,7 +85,9 @@ export class StaffComponent implements AfterViewInit, OnInit {
 
   triggerImageChange() {
     console.log('triggerImageChange called for StaffComponent'); // Debug log
-    this.resetGifs();
+    setTimeout(() => {
+      this.resetGifs();
+    }, 3000); // Delay of 1 second (1000 milliseconds)
   }
 
   resetGifs() {
